@@ -12,25 +12,25 @@ def sumas_divisores_propios(MAX: int) -> list[int]:
 def amigos(MAX: int):
     t1 = time.time()
 
-    sp = sumas_divisores_propios(MAX)
-    vis = bytearray(MAX + 1)
+    sum_div= sumas_divisores_propios(MAX)
+    vistos = bytearray(MAX + 1)
 
     pares: list[tuple[int, int]] = []
     pares.append((0, 0))
     for a in range(1, MAX + 1):
-        if vis[a]:
+        if vistos[a]:
             continue
-        b = sp[a]
+        b = sum_div[a]
 
         if b == a:
 
             pares.append((a, a))
-        elif 1 <= b <= MAX and sp[b] == a:
+        elif 1 <= b <= MAX and sum_div[b] == a:
             if a < b:
                 pares.append((a, b))
             if 1 <= b <= MAX:
-                vis[a] = 1
-                vis[b] = 1
+                vistos[a] = 1
+                vistos[b] = 1
 
     t2 = time.time()
 
