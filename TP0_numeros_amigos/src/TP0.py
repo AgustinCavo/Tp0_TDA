@@ -1,8 +1,10 @@
 import time
 
 def sumas_divisores_propios(MAX: int) -> list[int]:
-    sums = [0] * (MAX + 1)
-    for d in range(1, MAX // 2 + 1):
+    sums = [1] * (MAX + 1)
+    sums[0]=0
+    sums[1]=0
+    for d in range(2, MAX // 2 + 1):
         for m in range(2 * d, MAX + 1, d):
             sums[m] += d
     return sums
@@ -31,12 +33,10 @@ def amigos(MAX: int):
                 vis[b] = 1
 
     t2 = time.time()
-    print(t2 - t1)
 
-    salida = []
     for a, b in pares:
-        salida.append(f"{a} {b}")
-    salida.append(f"Tiempo de cómputo: {t2 - t1:.6f} s")
-    return "\n".join(salida)
+        print(a, b)
+        
+    print(f"{t2 - t1:.6f}")
 
-amigos(100000)
+amigos(1000000)

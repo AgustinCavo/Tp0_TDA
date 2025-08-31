@@ -17,4 +17,4 @@ def amigos(MAX):
     t2=time.time()    
     print(t2-t1)
 
-amigos(100000)
+amigos(150000)

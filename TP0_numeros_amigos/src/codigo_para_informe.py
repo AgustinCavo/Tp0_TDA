@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 import math
 
 def sumas_divisores_propios(MAX: int) -> list[int]:
-    sums = [0] * (MAX + 1)
-    for d in range(1, MAX // 2 + 1):
+    sums = [1] * (MAX + 1)
+    sums[0]=0
+    sums[1]=0
+    for d in range(2, MAX // 2 + 1):
         for m in range(2 * d, MAX + 1, d):
             sums[m] += d
     return sums
@@ -41,7 +43,7 @@ def amigos(MAX: int):
     salida = []
     for a, b in pares:
         salida.append(f"{a} {b}")
-    salida.append(f"Tiempo de cómputo: {t2 - t1:.6f} s")
+    salida.append(f"Tiempo: {t2 - t1:.6f} s")
     return "\n".join(salida)
 
 def crear_corridas(max_values):
@@ -55,14 +57,13 @@ def crear_corridas(max_values):
         filename = os.path.join(carpeta, f"{m}_refactor_amigos.txt")
         with open(filename, "w", encoding="utf-8") as f:
             f.write(resultado)
-        print(f"Resultados guardados en {filename}")
         del resultado
         gc.collect()
 
 def crear_graficos_tiempo(max_values):
     carpeta = "TP0_numeros_amigos/corridas"
     xs, ys = [], []
-    patron = re.compile(r"Tiempo de cómputo:\s*([0-9]+(?:\.[0-9]+)?)\s*s")
+    patron = re.compile(r"Tiempo:\s*([0-9]+(?:\.[0-9]+)?)\s*s")
     for m in max_values:
         fname = os.path.join(carpeta, f"{m}_refactor_amigos.txt")
         try:
@@ -105,7 +106,7 @@ def crear_graficos_tiempo(max_values):
     
 
 
-max_values = [50000, 100000,150000,250000,350000,500000,1000000,2000000,3000000,5000000,7000000,10000000,20000000,30000000,50000000]
-#max_values = [40000000]
+max_values = [50000, 100000,150000,200000,250000,350000,500000,1000000,2000000,3000000,5000000,7000000,10000000,20000000,30000000,40000000,50000000]
+#max_values = [50000, 100000,150000,250000,350000,500000,1000000]
 #crear_corridas(max_values)
 crear_graficos_tiempo(max_values)
