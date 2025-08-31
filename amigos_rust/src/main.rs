@@ -5,7 +5,9 @@ use std::time::Instant;
 
 fn sumas_divisores_propios(max: usize) -> Vec<u64> {
 
-    let mut sums = vec![0u64; max + 1];
+    let mut sums = vec![1u64; max + 1];
+    sums[0] = 0;
+    sums[1] = 0;
     let half = max / 2;
     for d in 1..=half {
         let mut m = d * 2;
