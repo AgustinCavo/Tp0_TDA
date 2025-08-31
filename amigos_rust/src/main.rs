@@ -45,20 +45,20 @@ fn amigos_a_archivo(max: usize, path: &str) -> std::io::Result<()> {
     }
 
     let dt = t0.elapsed().as_secs_f64();
-    writeln!(w, "Tiempo de cómputo: {:.6} s", dt)?;
+    writeln!(w, "Tiempo: {:.6} s", dt)?;
     w.flush()?;
     Ok(())
 }
 
 fn main() -> std::io::Result<()> {
 
-    let mut args = std::env::args().skip(1);
+    let args = std::env::args().skip(1);
     let max_values: Vec<usize> = if args.len() > 0 {
         args.filter_map(|s| s.replace('_', "").parse::<usize>().ok()).collect()
     } else {
         vec![
-            50_000, 100_000, 150_000, 250_000, 350_000,
-            500_000, 1_000_000, 5_000_000, 10_000_000, 50_000_000, 100_000_000
+            50000, 100000, 150000, 250000, 350000,
+            500000, 1000000, 5000000, 10000000, 50000000, 100000000
 
         ]
     };

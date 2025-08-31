@@ -1,10 +1,9 @@
 import time
 import os
+import gc
 import re
-
-import matplotlib
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import math
 
 def sumas_divisores_propios(MAX: int) -> list[int]:
     sums = [0] * (MAX + 1)
@@ -20,7 +19,7 @@ def amigos(MAX: int):
     vis = bytearray(MAX + 1)
 
     pares: list[tuple[int, int]] = []
-
+    pares.append((0, 0))
     for a in range(1, MAX + 1):
         if vis[a]:
             continue
@@ -37,6 +36,7 @@ def amigos(MAX: int):
                 vis[b] = 1
 
     t2 = time.time()
+    print(t2 - t1)
 
     salida = []
     for a, b in pares:
@@ -44,9 +44,9 @@ def amigos(MAX: int):
     salida.append(f"Tiempo de cómputo: {t2 - t1:.6f} s")
     return "\n".join(salida)
 
-def crear_corridas(max_values,carpeta):
+def crear_corridas(max_values):
 
-    
+    carpeta = "TP0_numeros_amigos/corridas"
     os.makedirs(carpeta, exist_ok=True)
 
     for m in max_values:
@@ -56,8 +56,11 @@ def crear_corridas(max_values,carpeta):
         with open(filename, "w", encoding="utf-8") as f:
             f.write(resultado)
         print(f"Resultados guardados en {filename}")
+        del resultado
+        gc.collect()
 
-def crear_graficos_tiempo(max_values, carpeta):
+def crear_graficos_tiempo(max_values):
+    carpeta = "TP0_numeros_amigos/corridas"
     xs, ys = [], []
     patron = re.compile(r"Tiempo de cómputo:\s*([0-9]+(?:\.[0-9]+)?)\s*s")
     for m in max_values:
@@ -75,22 +78,34 @@ def crear_graficos_tiempo(max_values, carpeta):
 
     plt.figure(figsize=(10, 6))
     if xs:
-        plt.plot(xs, ys, marker="o", label="TP0 refactor (array uint32)")
+        # curva medida
+        plt.plot(xs, ys, marker="o", label="TP0 refactor")
+
+        # --- Ajuste a c * n log n ---
+        f = [n * math.log(n) for n in xs]  # log natural
+        sum_ff = sum(val * val for val in f)
+        if sum_ff > 0:
+            c = sum(y * fi for y, fi in zip(ys, f)) / sum_ff
+            y_fit = [c * fi for fi in f]
+            plt.plot(xs, y_fit, linestyle="--", marker=None, label=r"Ajuste $c \cdot n\log n$")
+            # opcional: mostrar c en el título
+            plt.title(f"Tiempos por MAX – Refactor TP0 (ajuste ~ n log n, c≈{c:.3e})")
+        else:
+            plt.title("Tiempos por MAX – Refactor TP0")
+
     plt.xlabel("MAX (escala log)")
     plt.ylabel("Segundos (escala log)")
-    plt.title("Tiempos por MAX – Refactor TP0 (pares amigos + perfectos)")
     plt.grid(True, linestyle="--", alpha=0.5)
     plt.xscale("log")
     plt.yscale("log")
-
-    # 👇 forzar a que todos los valores de max_values estén marcados
     plt.xticks(xs, [str(v) for v in xs], rotation=45)
-
     plt.legend()
     plt.tight_layout()
     plt.savefig("graficos_refactor_tp0.png", dpi=150)
-    print("Gráfico guardado en graficos_refactor_tp0.png")
-carpeta = "TP0_numeros_amigos/corridas"
-max_values = [50000, 100000, 150000, 250000,350000,500000,1000000,5000000,10000000,50000000]
-crear_corridas(max_values,carpeta)
-#crear_graficos_tiempo(max_values,carpeta)
+    
+
+
+max_values = [50000, 100000,150000,250000,350000,500000,1000000,2000000,3000000,5000000,7000000,10000000,20000000,30000000,50000000]
+#max_values = [40000000]
+#crear_corridas(max_values)
+crear_graficos_tiempo(max_values)

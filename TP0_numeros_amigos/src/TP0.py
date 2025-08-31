@@ -9,16 +9,23 @@ def sumas_divisores_propios(MAX: int) -> list[int]:
 
 def amigos(MAX: int):
     t1 = time.time()
-    lista_suma_divisores = sumas_divisores_propios(MAX)
-    vis = bytearray(MAX + 1) 
 
+    sp = sumas_divisores_propios(MAX)
+    vis = bytearray(MAX + 1)
+
+    pares: list[tuple[int, int]] = []
+    pares.append((0, 0))
     for a in range(1, MAX + 1):
         if vis[a]:
             continue
-        b = lista_suma_divisores[a]
-        
-        if b != a and 1 <= b <= MAX and lista_suma_divisores[b] == a:
-            print(a, b) if a < b else print(b, a)
+        b = sp[a]
+
+        if b == a:
+
+            pares.append((a, a))
+        elif 1 <= b <= MAX and sp[b] == a:
+            if a < b:
+                pares.append((a, b))
             if 1 <= b <= MAX:
                 vis[a] = 1
                 vis[b] = 1
@@ -26,5 +33,10 @@ def amigos(MAX: int):
     t2 = time.time()
     print(t2 - t1)
 
+    salida = []
+    for a, b in pares:
+        salida.append(f"{a} {b}")
+    salida.append(f"Tiempo de cómputo: {t2 - t1:.6f} s")
+    return "\n".join(salida)
 
 amigos(100000)
